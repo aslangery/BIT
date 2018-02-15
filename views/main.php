@@ -5,5 +5,7 @@
     <title>Приложение</title>
 </head>
 <body>
-@content@
+{{content}}
 </body>
+</html>
+

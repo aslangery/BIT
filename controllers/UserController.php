@@ -9,6 +9,8 @@
 namespace Controllers;
 
 use Models\User;
+use DB;
+
 class UserController
 {
     public function authorise($request)
@@ -17,11 +19,8 @@ class UserController
             $user=User::get('username',$request['username']);
             if (md5($request['password'])==$user->password)
             {
-                $query='INSERT INTO sessions(user_id,session_id) VALUES('.$user->id.', '.session_id().')';
-                if(DB::query($query))
-                {
-                    return true;
-                }
+                $_SESSION['user_id']=$user->id;
+                return true;
             }
         }
         return false;

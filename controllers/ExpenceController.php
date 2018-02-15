@@ -8,18 +8,26 @@
 
 namespace Controllers;
 
+use Models\Expence;
+use Models\Billing;
 
 class ExpenceController
 {
-    public function pay($cost=0,$user_id)
+
+    /**
+     * @param Billing $billing
+     * @param double $cost
+     * @return bool
+     */
+    public function pay(Billing $billing, $cost=0)
     {
         if ($cost!==0)
         {
-            $query='INSERT INTO expences VALUES('.$user_id.', '.$cost.', NOW())';
-            if (DB::query($query))
+            $expence=new Expence($billing->user_id,$cost);
+            if ($expence->save())
             {
-                $query='UPDATE billing SET amount=amount-'.$cost.' WHERE user_id='.(int)$user_id;
-                if (DB::query($query))
+                $billing->amount-=$cost;
+                if ($billing->save())
                 {
                     return true;
                 }

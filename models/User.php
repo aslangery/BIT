@@ -8,6 +8,7 @@
 
 namespace Models;
 
+use DB;
 
 class User
 {
@@ -22,7 +23,12 @@ class User
     public $password='';
 
 
-    static public function get($key='',$value='')
+    /**
+     * @param string $key
+     * @param string $value
+     * @return User|object|\stdClass
+     */
+    static public function get($key='', $value='')
     {
         if ($key!=='' && $value!=='')
         {
