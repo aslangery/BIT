@@ -39,4 +39,17 @@ class Billing
         $query='UPDATE '.$this->table.' SET amount='.$this->amount.' WHERE user_id='.(int)$this->user_id;
         return DB::query($query);
     }
+
+    public function getExpences()
+    {
+        $query="SELECT * FROM expences WHERE user_id=".$this->user_id;
+        if($result=DB::query($query))
+        {
+            foreach ($result as $row)
+            {
+                $expences[]=$row;
+            }
+        }
+        return $expences;
+    }
 }

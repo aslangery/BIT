@@ -19,8 +19,10 @@ class ExpenceController
      * @param double $cost
      * @return bool
      */
-    public function pay(Billing $billing, $cost=0)
+    public function pay($app)
     {
+        $cost=$app->request['post']['cost'];
+        $billing=new Billing($app->session->user_id);
         if ($cost!==0)
         {
             $expence=new Expence($billing->user_id,$cost);
@@ -29,10 +31,17 @@ class ExpenceController
                 $billing->amount-=$cost;
                 if ($billing->save())
                 {
-                    return true;
+                    header('Location: index.php?view=account&task=expence.listing');
                 }
             }
         }
         return false;
+    }
+    public function listing($app)
+    {
+        $bill=new Billing($app->session->user_id);
+        $result['amount']=$bill->amount;
+        $result['expences']=$bill->getExpences();
+        return $result;
     }
 }

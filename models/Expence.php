@@ -12,7 +12,7 @@ use DB;
 
 class Expence
 {
-    protected $table='expence';
+    protected $table='expences';
 
     public $user_id=0;
 
@@ -25,7 +25,7 @@ class Expence
      * @param int $user_id
      * @param double $cost
      */
-    public function __construct($user_id, $cost)
+    public function __construct($user_id=0, $cost=0)
     {
         $this->user_id=$user_id;
         $this->cost=$cost;
@@ -37,7 +37,7 @@ class Expence
      */
     public function save()
     {
-        $query='INSERT INTO '.$this->table.' VALUES('.$this->user_id.', '.$this->cost.', '.$this->payment_date.')';
+        $query="INSERT INTO ".$this->table." VALUES(".$this->user_id.", '".$this->cost."', '".$this->payment_date."')";
         return DB::query($query);
     }
 }

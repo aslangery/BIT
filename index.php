@@ -12,16 +12,9 @@ spl_autoload_register(function ($class) {
 });
 
 $app=new App();
-var_dump($app);
-if ($app->authorise())
-{
-    $view=$app->request['view'];
+//var_dump($app);
+$app->run();
 
-}
-else
-{
-    $app->render($app->getView('login'));
-}
 echo $app->response();
 session_write_close();
 

@@ -9,18 +9,23 @@
 namespace Controllers;
 
 use Models\User;
-use DB;
+use Models\Session;
 
 class UserController
 {
-    public function authorise($request)
+    public function login($request)
     {
-        if (isset($request['username'])){
-            $user=User::get('username',$request['username']);
-            if (md5($request['password'])==$user->password)
+        if ($request['post']['username']!==null){
+            $user=User::get('username',$request['post']['username']);
+            if (md5($request['post']['password'])==$user->password)
             {
-                $_SESSION['user_id']=$user->id;
-                return true;
+                $session=new Session();
+                $session->user_id=$user->id;
+                $session->session_id=session_id();
+                if($session->save())
+                {
+                    header('Location: index.php?view=account&task=expence.listing');
+                }
             }
         }
         return false;
