@@ -13,6 +13,10 @@ use Models\Session;
 
 class UserController
 {
+    /**
+     * @param $app
+     * @return bool
+     */
     public function login($app)
     {
         if ($app->request['post']['username']!==null){
@@ -31,6 +35,10 @@ class UserController
         }
         return false;
     }
+
+    /**
+     * @param $app
+     */
     public function logout($app)
     {
         if($app->session->delete())
@@ -40,6 +48,5 @@ class UserController
             session_destroy();
             header('Location: http://'.$host.'/');
         }
-
     }
 }

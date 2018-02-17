@@ -35,6 +35,11 @@ class ExpenceController
         $host  = $_SERVER['HTTP_HOST'];
         header('Location: http://'.$host.'/index.php?view=account&task=expence.listing');
     }
+
+    /**
+     * @param $app
+     * @return mixed
+     */
     public function listing($app)
     {
         $bill=new Billing($app->session->user_id);

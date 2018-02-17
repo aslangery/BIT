@@ -40,6 +40,9 @@ class Billing
         return DB::query($query);
     }
 
+    /**
+     * @return array
+     */
     public function getExpences()
     {
         $query="SELECT * FROM expences WHERE user_id=".$this->user_id;

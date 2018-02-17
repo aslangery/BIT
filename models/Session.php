@@ -18,6 +18,10 @@ class Session
 
     public $session_id = '';
 
+    /**
+     * @param string $session_id
+     * @return $this|object|\stdClass
+     */
     public function get($session_id='')
     {
         if ($session_id!=='')
@@ -35,11 +39,18 @@ class Session
         }
     }
 
+    /**
+     * @return bool|\mysqli_result
+     */
     public function save()
     {
         $query="INSERT INTO ".$this->table." VALUES(".$this->user_id.", '".$this->session_id."')";
         return DB::query($query);
     }
+
+    /**
+     * @return bool|\mysqli_result
+     */
     public function delete()
     {
         $query="DELETE FROM ".$this->table." WHERE session_id='".$this->session_id."'";

@@ -40,6 +40,12 @@ class App
 
         $this->view=$this->getView('main');
     }
+
+    /**
+     * @param string $name
+     * @param string $vars
+     * @return bool|string
+     */
     public static function getView($name='', $vars='')
     {
         ob_start();
@@ -53,7 +59,12 @@ class App
         ob_end_clean();
         return false;
     }
-    public function render($view='',$position='content')
+
+    /**
+     * @param string $view
+     * @param string $position
+     */
+    public function render($view='', $position='content')
     {
         $pattern='/\{\{'.$position.'\}\}/';
         $this->view=preg_replace($pattern, $view, $this->view);
@@ -73,6 +84,8 @@ class App
         }
         return false;
     }
+
+
     public function run()
     {
         $vars='';
