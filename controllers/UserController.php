@@ -13,21 +13,33 @@ use Models\Session;
 
 class UserController
 {
-    public function login($request)
+    public function login($app)
     {
-        if ($request['post']['username']!==null){
-            $user=User::get('username',$request['post']['username']);
-            if (md5($request['post']['password'])==$user->password)
+        if ($app->request['post']['username']!==null){
+            $user=User::get('username',$app->request['post']['username']);
+            if (md5($app->request['post']['password'])==$user->password)
             {
                 $session=new Session();
                 $session->user_id=$user->id;
                 $session->session_id=session_id();
                 if($session->save())
                 {
-                    header('Location: index.php?view=account&task=expence.listing');
+                    $host  = $_SERVER['HTTP_HOST'];
+                    header('Location: http://'.$host.'/index.php?view=account&task=expence.listing');
                 }
             }
         }
         return false;
+    }
+    public function logout($app)
+    {
+        if($app->session->delete())
+        {
+            //unset($app->session);
+            $host  = $_SERVER['HTTP_HOST'];
+            session_destroy();
+            header('Location: http://'.$host.'/');
+        }
+
     }
 }

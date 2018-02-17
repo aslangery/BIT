@@ -23,13 +23,14 @@ class Session
         if ($session_id!=='')
         {
             $query="SELECT user_id, session_id FROM ".$this->table." WHERE session_id='".$session_id."'";
-            if($result=DB::query($query))
+            $result=DB::query($query);
+            if($result->num_rows!=0)
             {
-                return $result->fetch_object('\Models\Session');
+                return $result->fetch_object('Models\Session');
             }
             else
             {
-                return false;
+                return $this;
             }
         }
     }
@@ -37,6 +38,11 @@ class Session
     public function save()
     {
         $query="INSERT INTO ".$this->table." VALUES(".$this->user_id.", '".$this->session_id."')";
+        return DB::query($query);
+    }
+    public function delete()
+    {
+        $query="DELETE FROM ".$this->table." WHERE session_id='".$this->session_id."'";
         return DB::query($query);
     }
 

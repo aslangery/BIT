@@ -10,7 +10,7 @@ class App
 {
     protected $view='';
 
-    protected $user=0;
+    public $username='guest';
 
     public $request=array();
 
@@ -53,9 +53,10 @@ class App
         ob_end_clean();
         return false;
     }
-    public function render($view='')
+    public function render($view='',$position='content')
     {
-        $this->view=preg_replace('/\{\{content\}\}/', $view, $this->view);
+        $pattern='/\{\{'.$position.'\}\}/';
+        $this->view=preg_replace($pattern, $view, $this->view);
     }
 
     public function response()
@@ -76,6 +77,8 @@ class App
     {
         $vars='';
         if ($this->authorise()) {
+            $user= \Models\User::get('id',$this->session->user_id);
+            $this->username=$user->username;
             if ($this->request['get']['task'] !== null) {
                 $task = $this->request['get']['task'];
                 $args = explode('.', $task);
@@ -83,10 +86,12 @@ class App
                 $controller = new $cname;
                 $method = $args[1];
                 $vars = $controller->$method($this);
+                $vars['username']=$this->username;
             }
             if ($this->request['get']['view'] !== null) {
                 $view = $this->request['get']['view'];
                 $this->render($this->getView($view, $vars));
+                $this->render($this->getView('logout',$vars),'auth');
             }
         }
         else
@@ -94,9 +99,9 @@ class App
             if($this->request['get']['task']=='user.login')
             {
                 $controller=new \Controllers\UserController();
-                $controller->login($this->request);
+                $controller->login($this);
             }
-            $this->render($this->getView('login'));
+            $this->render($this->getView('login'),'auth');
         }
     }
 }

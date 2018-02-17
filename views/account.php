@@ -10,7 +10,7 @@
     <span>Текущее состояние: <b><?php echo $vars['amount'];?></b></span>
 </div>
 <div>
-    <form method="post" action="index.php?view=account&task=expence.pay"/>
+    <form method="post" action="index.php?view=account&task=expence.pay">
     <input type="text" name="cost"/>
     <button type="submit" >Оплатить</button>
     </form>

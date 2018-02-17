@@ -31,7 +31,8 @@ class ExpenceController
                 $billing->amount-=$cost;
                 if ($billing->save())
                 {
-                    header('Location: index.php?view=account&task=expence.listing');
+                    $host  = $_SERVER['HTTP_HOST'];
+                    header('Location: http://'.$host.'/index.php?view=account&task=expence.listing');
                 }
             }
         }

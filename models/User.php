@@ -32,9 +32,9 @@ class User
     {
         if ($key!=='' && $value!=='')
         {
-            $query="SELECT * FROM ".self::$table." WHERE ".$key."='".$value."'";
+            $query="SELECT * FROM users WHERE ".$key."='".$value."'";
             $user=DB::query($query);
-            return $user->fetch_object('\Models\User');
+            return $user->fetch_object('Models\User');
         }
         else
         {

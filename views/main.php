@@ -5,6 +5,10 @@
     <title>Приложение</title>
 </head>
 <body>
+<div id="auth">
+    {{auth}}
+</div>
+
 {{content}}
 </body>
 </html>

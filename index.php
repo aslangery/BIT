@@ -12,7 +12,7 @@ spl_autoload_register(function ($class) {
 });
 
 $app=new App();
-//var_dump($app);
+
 $app->run();
 
 echo $app->response();
