@@ -11,7 +11,7 @@
 </div>
 <div>
     <form method="post" action="index.php?view=account&task=expence.pay">
-    <input type="text" name="cost"/>
+    <input type="text" name="cost" value="0.00"/>
     <button type="submit" >Оплатить</button>
     </form>
 </div>

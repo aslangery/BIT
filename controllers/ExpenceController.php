@@ -23,20 +23,17 @@ class ExpenceController
     {
         $cost=$app->request['post']['cost'];
         $billing=new Billing($app->session->user_id);
-        if ($cost!==0)
+        if ($cost!=0)
         {
             $expence=new Expence($billing->user_id,$cost);
             if ($expence->save())
             {
                 $billing->amount-=$cost;
-                if ($billing->save())
-                {
-                    $host  = $_SERVER['HTTP_HOST'];
-                    header('Location: http://'.$host.'/index.php?view=account&task=expence.listing');
-                }
+                $billing->save();
             }
         }
-        return false;
+        $host  = $_SERVER['HTTP_HOST'];
+        header('Location: http://'.$host.'/index.php?view=account&task=expence.listing');
     }
     public function listing($app)
     {
