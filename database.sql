@@ -4,19 +4,19 @@ CREATE TABLE IF NOT EXISTS users(
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
   username VARCHAR(40),
   email VARCHAR(100),
-  password TINYTEXT
+  password VARCHAR(32)
 );
 CREATE TABLE IF NOT EXISTS billing(
   user_id INTEGER NOT NULL,
-  amount DOUBLE
+  amount DECIMAL(10,2) UNSIGNED DEFAULT 0
 );
 CREATE TABLE IF NOT EXISTS expences(
   user_id INTEGER NOT NULL,
-  cost DOUBLE NOT NULL,
+  cost DECIMAL(10,2) UNSIGNED NOT NULL,
   payment_date DATETIME
 );
   CREATE TABLE IF NOT EXISTS sessions(
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     user_id INTEGER NOT NULL,
-    session_id VARCHAR(64)
+    session_id VARCHAR(32)
   );
