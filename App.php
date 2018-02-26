@@ -6,6 +6,8 @@
  * Time: 21:42
  */
 use Models\Session;
+use Models\User;
+use Controllers\UserController;
 class App
 {
     protected $view='';
@@ -90,7 +92,7 @@ class App
     {
         $vars='';
         if ($this->authorise()) {
-            $user= \Models\User::get('id',$this->session->user_id);
+            $user= User::get('id',$this->session->user_id);
             $this->username=$user->username;
             if ($this->request['get']['task'] !== null) {
                 $task = $this->request['get']['task'];
@@ -111,7 +113,7 @@ class App
         {
             if($this->request['get']['task']=='user.login')
             {
-                $controller=new \Controllers\UserController();
+                $controller=new UserController();
                 $controller->login($this);
             }
             $this->render($this->getView('login'),'auth');
