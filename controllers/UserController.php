@@ -23,14 +23,17 @@ class UserController
             $user=User::get('username',$app->request['post']['username']);
             if (md5($app->request['post']['password'])==$user->password)
             {
-                $session=new Session();
-                $session->user_id=$user->id;
-                $session->session_id=session_id();
-                if($session->save())
-                {
-                    $host  = $_SERVER['HTTP_HOST'];
-                    header('Location: http://'.$host.'/index.php?view=account&task=expence.listing');
-                }
+	            if(session_regenerate_id())
+	            {
+		            $session             = new Session();
+		            $session->user_id    = $user->id;
+		            $session->session_id = session_id();
+		            if ($session->save())
+		            {
+			            $host = $_SERVER['HTTP_HOST'];
+			            header('Location: http://' . $host . '/index.php?view=account&task=expence.listing');
+		            }
+	            }
             }
         }
         return false;
