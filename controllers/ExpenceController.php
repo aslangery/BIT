@@ -23,7 +23,7 @@ class ExpenceController
     {
         $cost=$app->request['post']['cost'];
         $billing=new Billing($app->session->user_id);
-        if ($cost!=0)
+        if ($cost!=0 && $cost<=$billing->amount)
         {
             $expence=new Expence($billing->user_id,$cost);
             if ($expence->save())
