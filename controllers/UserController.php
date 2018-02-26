@@ -23,9 +23,11 @@ class UserController
             $user=User::get('username',$app->request['post']['username']);
             if (md5($app->request['post']['password'])==$user->password)
             {
+            	session_start();
 	            if(session_regenerate_id())
 	            {
-		            $session             = new Session();
+		            session_write_close();
+	            	$session             = new Session();
 		            $session->user_id    = $user->id;
 		            $session->session_id = session_id();
 		            if ($session->save())
