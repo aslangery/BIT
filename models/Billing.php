@@ -10,7 +10,7 @@ namespace Models;
 
 use DB;
 
-class Billing
+class Billing extends Model
 {
     protected $table='billing';
 
@@ -24,11 +24,21 @@ class Billing
      */
     public function __construct($user_id)
     {
-        $query='SELECT user_id, amount FROM '.$this->table.' WHERE user_id='.(int)$user_id;
-        $result=DB::query($query);
-        $array=$result->fetch_array();
-        $this->user_id=$user_id;
-        $this->amount=$array['amount'];
+        $query='SELECT user_id, amount FROM '.$this->table.' WHERE user_id= :id';
+	    $this->statement=$this->pdo->prepare($query);
+	    $this->statement->bindParam('id', $user_id,\PDO::PARAM_INT);
+	    if($this->statement->execute())
+	    {
+		    $result=$this->statement->fetchObject('Models\Billing');
+		    unset($this->statement);
+		    $this->amount=$result->amount;
+		    $this->user_id=$result->user_id;
+	    }
+	    else
+	    {
+		    unset($this->statement);
+		    return null;
+	    }
     }
 
     /**
@@ -36,8 +46,13 @@ class Billing
      */
     public function save()
     {
-        $query='UPDATE '.$this->table.' SET amount='.$this->amount.' WHERE user_id='.(int)$this->user_id;
-        return DB::query($query);
+        $query='UPDATE '.$this->table.' SET amount= :amount WHERE user_id= :id';
+	    $this->statement=$this->pdo->prepare($query);
+	    $this->statement->bindParam('id',$this->user_id,\PDO::PARAM_INT);
+	    $this->statement->bindParam('amount',$this->amount);
+	    $result=$this->statement->execute();
+	    unset($this->statement);
+	    return $result;
     }
 
     /**
@@ -45,14 +60,19 @@ class Billing
      */
     public function getExpences()
     {
-        $query="SELECT * FROM expences WHERE user_id=".$this->user_id;
-        if($result=DB::query($query))
-        {
-            foreach ($result as $row)
-            {
-                $expences[]=$row;
-            }
-        }
-        return $expences;
+        $query='SELECT * FROM expences WHERE user_id=:id';
+	    $this->statement=$this->pdo->prepare($query);
+	    $this->statement->bindParam('id',$this->user_id,\PDO::PARAM_INT);
+	    if($this->statement->execute())
+	    {
+		    $result=$this->statement->fetchAll(\PDO::FETCH_CLASS,'Models\Expension');
+		    unset($this->statement);
+		    return $result;
+	    }
+	    else
+	    {
+		    unset($this->statement);
+		    return null;
+	    }
     }
 }

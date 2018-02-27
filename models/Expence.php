@@ -8,8 +8,6 @@
 
 namespace Models;
 
-use DB;
-
 class Expence
 {
     protected $table='expences';
@@ -37,7 +35,13 @@ class Expence
      */
     public function save()
     {
-        $query="INSERT INTO ".$this->table." VALUES(".$this->user_id.", '".$this->cost."', '".$this->payment_date."')";
-        return DB::query($query);
+        $query='INSERT INTO '.$this->table.' VALUES(:id, :cost, :payment)';
+	    $this->statement=$this->pdo->prepare($query);
+	    $this->statement->bindParam('id',$this->user_id,\PDO::PARAM_INT);
+	    $this->statement->bindParam('cost',$this->cost);
+	    $this->statement->bindParam('cost',$this->payment_date);
+	    $result=$this->statement->execute();
+	    unset($this->statement);
+	    return $result;
     }
 }

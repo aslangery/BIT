@@ -8,9 +8,7 @@
 
 namespace Models;
 
-use DB;
-
-class User
+class User extends Model
 {
     protected static $table='users';
 
@@ -28,17 +26,24 @@ class User
      * @param string $value
      * @return User|object|\stdClass
      */
-    static public function get($key='', $value='')
+    public function get($key='', $value='')
     {
         if ($key!=='' && $value!=='')
         {
-            $query="SELECT * FROM users WHERE ".$key."='".$value."'";
-            $user=DB::query($query);
-            return $user->fetch_object('Models\User');
+	        $query           = 'SELECT * FROM users WHERE :key = :value';
+	        $this->statement = $this->pdo->prepare($query);
+	        $this->statement->bindParam('key', $key, \PDO::PARAM_STR);
+	        $this->statement->bindParam('value', $value, \PDO::PARAM_STR);
+	        if ($this->statement->execute())
+	        {
+		        $result = $this->statement->fetchObject('Models\User');
+		        unset($this->statement);
+
+		        return $result;
+	        }
         }
-        else
-        {
-            return new User();
+        else{
+        	return $this;
         }
     }
 }
