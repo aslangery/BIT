@@ -92,7 +92,8 @@ class App
     {
         $vars='';
         if ($this->authorise()) {
-            $user= User::get('id',$this->session->user_id);
+            $u= new User();
+	        $user=$u->get('id',$this->session->user_id);
             $this->username=$user->username;
             if ($this->request['get']['task'] !== null) {
                 $task = $this->request['get']['task'];
