@@ -6,16 +6,19 @@
  * Time: 19:36
  */
 session_start();
+session_write_close();
+
+define('DSN','mysql:dbname=bit;host=127.0.0.1');
+define('USER', 'root');
+define('PASS', 'root');
 spl_autoload_register(function ($class) {
     $path=str_replace('\\','/', $class);
     include $path.'.php';
 });
-
 $app=new App();
 
 $app->run();
 
 echo $app->response();
-session_write_close();
 
 

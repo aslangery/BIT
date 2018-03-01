@@ -8,11 +8,9 @@
 
 namespace Models;
 
-use DB;
-
-class User
+class User extends Model
 {
-    protected static $table='users';
+    protected $table='users';
 
     public $id=0;
 
@@ -23,22 +21,29 @@ class User
     public $password='';
 
 
-    /**
-     * @param string $key
-     * @param string $value
-     * @return User|object|\stdClass
-     */
-    static public function get($key='', $value='')
-    {
-        if ($key!=='' && $value!=='')
+	/**
+	 * User constructor.
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+	}
+	public function get($key='', $value='')
+	{
+    	if ($key!=='' && $value!=='')
         {
-            $query="SELECT * FROM users WHERE ".$key."='".$value."'";
-            $user=DB::query($query);
-            return $user->fetch_object('Models\User');
+	        $query           = 'SELECT * FROM '.$this->table.' WHERE '.$key.' = :value';
+	        $this->statement = $this->pdo->prepare($query);
+	        $this->statement->bindValue(':value', $value, \PDO::PARAM_STR);
+	        if ($this->statement->execute())
+	        {
+		        if($result = $this->statement->fetchObject('Models\User'))
+		        {
+		        	return $result;
+		        }
+	        }
+	        unset($this->statement);
         }
-        else
-        {
-            return new User();
-        }
+        return $this;
     }
 }

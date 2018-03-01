@@ -13,37 +13,45 @@ use Models\Session;
 
 class UserController
 {
-    /**
-     * @param $app
-     * @return bool
-     */
-    public function login($app)
+
+	/**
+	 * @param \App $app
+	 *
+	 * @return bool
+	 */
+	public function login(\App $app)
     {
-        if ($app->request['post']['username']!==null){
-            $user=User::get('username',$app->request['post']['username']);
-            if (md5($app->request['post']['password'])==$user->password)
+        if ($app->request->post['username']!==null){
+        	$u=new User();
+            $user=$u->get('username',$app->request->post['username']);
+            if (md5($app->request->post['password'])==$user->password)
             {
-                $session=new Session();
-                $session->user_id=$user->id;
-                $session->session_id=session_id();
-                if($session->save())
-                {
-                    $host  = $_SERVER['HTTP_HOST'];
-                    header('Location: http://'.$host.'/index.php?view=account&task=expence.listing');
-                }
+            	session_start();
+	            if(session_regenerate_id())
+	            {
+		            session_write_close();
+	            	$session             = new Session();
+		            $session->user_id    = $user->id;
+		            $session->session_id = session_id();
+		            if ($session->save())
+		            {
+			            $host = $_SERVER['HTTP_HOST'];
+			            header('Location: http://' . $host . '/index.php?view=account&task=expence.listing');
+		            }
+	            }
             }
         }
         return false;
     }
 
-    /**
-     * @param $app
-     */
-    public function logout($app)
+
+	/**
+	 * @param \App $app
+	 */
+	public function logout(\App $app)
     {
         if($app->session->delete())
         {
-            //unset($app->session);
             $host  = $_SERVER['HTTP_HOST'];
             session_destroy();
             header('Location: http://'.$host.'/');
