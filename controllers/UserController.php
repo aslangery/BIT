@@ -33,7 +33,6 @@ class UserController
 	            	$session             = new Session();
 		            $session->user_id    = $user->id;
 		            $session->session_id = session_id();
-
 		            if ($session->save())
 		            {
 			            $host = $_SERVER['HTTP_HOST'];

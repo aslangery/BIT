@@ -49,10 +49,10 @@ class Session extends Model
      */
     public function save()
     {
-        $query='INSERT INTO '.$this->table.' VALUES( :user, :session)';
+        $query='INSERT INTO '.$this->table.'(user_id, session_id) VALUES( :user, :session)';
 	    $this->statement=$this->pdo->prepare($query);
-	    $this->statement->bindValue(':user',$this->user_id,\PDO::PARAM_INT);
-	    $this->statement->bindValue(':session',$this->session_id, \PDO::PARAM_STR);
+	    $this->statement->bindValue(':user', $this->user_id,\PDO::PARAM_INT);
+	    $this->statement->bindValue(':session', $this->session_id, \PDO::PARAM_STR);
 	    $result=$this->statement->execute();
 	    unset($this->statement);
 	    return $result;
@@ -65,7 +65,7 @@ class Session extends Model
     {
         $query='DELETE FROM '.$this->table.' WHERE session_id= :id';
         $this->statement=$this->pdo->prepare($query);
-        $this->statement->bindParam(':id',$this->session_id, \PDO::PARAM_STR,32);
+        $this->statement->bindParam(':id', $this->session_id, \PDO::PARAM_STR,32);
 		$result=$this->statement->execute();
         unset($this->statement);
         return $result;
