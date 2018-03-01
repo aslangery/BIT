@@ -13,15 +13,12 @@ use Models\Billing;
 
 class ExpenceController
 {
-
-    /**
-     * @param Billing $billing
-     * @param double $cost
-     * @return bool
-     */
-    public function pay($app)
+	/**
+	 * @param \App $app
+	 */
+	public function pay(\App $app)
     {
-        $cost=$app->request['post']['cost'];
+        $cost=$app->request->post['cost'];
         $billing=new Billing($app->session->user_id);
         if ($cost>0 && $cost<=$billing->amount)
         {
@@ -36,13 +33,15 @@ class ExpenceController
         header('Location: http://'.$host.'/index.php?view=account&task=expence.listing');
     }
 
-    /**
-     * @param $app
-     * @return mixed
-     */
-    public function listing($app)
+
+	/**
+	 * @param \App $app
+	 *
+	 * @return mixed
+	 */
+	public function listing(\App $app)
     {
-        $bill=new Billing($app->session->user_id);
+    	$bill=new Billing($app->session->user_id);
         $result['amount']=$bill->amount;
         $result['expences']=$bill->getExpences();
         return $result;

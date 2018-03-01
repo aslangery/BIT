@@ -16,6 +16,11 @@ class Session extends Model
 
     public $session_id = '';
 
+    public function __construct()
+    {
+    	parent::__construct();
+    }
+
 	/**
      * @param string $session_id
      * @return null|object
@@ -26,18 +31,16 @@ class Session extends Model
         {
             $query='SELECT user_id, session_id FROM '.$this->table.' WHERE session_id= :id';
             $this->statement=$this->pdo->prepare($query);
-            $this->statement->bindParam('id',$session_id,\PDO::PARAM_STR, 32);
+            $this->statement->bindValue(':id', $session_id,\PDO::PARAM_STR);
             if($this->statement->execute())
             {
-                $result=$this->statement->fetchObject('Models\Session');
-                unset($this->statement);
-                return $result;
+	            if ($result = $this->statement->fetchObject('Models\Session'))
+	            {
+		            return $result;
+	            }
             }
-            else
-            {
-	            unset($this->statement);
-            	return null;
-            }
+	        unset($this->statement);
+	        return $this;
         }
     }
 
@@ -48,8 +51,8 @@ class Session extends Model
     {
         $query='INSERT INTO '.$this->table.' VALUES( :user, :session)';
 	    $this->statement=$this->pdo->prepare($query);
-	    $this->statement->bindParam('user',$this->user_id,\PDO::PARAM_INT);
-	    $this->statement->bindParam('session',$this->session_id, \PDO::PARAM_STR, 32);
+	    $this->statement->bindValue(':user',$this->user_id,\PDO::PARAM_INT);
+	    $this->statement->bindValue(':session',$this->session_id, \PDO::PARAM_STR);
 	    $result=$this->statement->execute();
 	    unset($this->statement);
 	    return $result;
@@ -60,9 +63,9 @@ class Session extends Model
      */
     public function delete()
     {
-        $query='DELETE FROM '.$this->table.' WHERE session_id=:id';
+        $query='DELETE FROM '.$this->table.' WHERE session_id= :id';
         $this->statement=$this->pdo->prepare($query);
-        $this->statement->bindParam('id',$this->session_id, \PDO::PARAM_STR,32);
+        $this->statement->bindParam(':id',$this->session_id, \PDO::PARAM_STR,32);
 		$result=$this->statement->execute();
         unset($this->statement);
         return $result;

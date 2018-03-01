@@ -8,38 +8,20 @@
 use Models\Session;
 use Models\User;
 use Controllers\UserController;
+
 class App
 {
     protected $view='';
 
     public $username='guest';
 
-    public $request=array();
+    public $request;
 
     public $session;
 
     public function __construct()
     {
-        $args = array(
-                'username'    => array('filter'    => FILTER_SANITIZE_STRING,
-                    'flags'     => FILTER_FLAG_ENCODE_LOW|FILTER_FLAG_ENCODE_HIGH,
-                ),
-                'password'    => array('filter'    => FILTER_SANITIZE_STRING,
-                    'flags'     => FILTER_FLAG_ENCODE_LOW|FILTER_FLAG_ENCODE_HIGH,
-                ),
-                'cost'=>FILTER_VALIDATE_FLOAT,
-                'e-mail'=>FILTER_VALIDATE_EMAIL,
-                'view'    => array('filter'    => FILTER_SANITIZE_STRING,
-                    'flags'     => FILTER_FLAG_ENCODE_LOW|FILTER_FLAG_ENCODE_HIGH,
-                ),
-                'task'    => array('filter'    => FILTER_SANITIZE_STRING,
-                    'flags'     => FILTER_FLAG_ENCODE_LOW|FILTER_FLAG_ENCODE_HIGH,
-                ),
-            );
-        $this->request['get']=filter_input_array(INPUT_GET,$args,TRUE);
-        $this->request['post']=filter_input_array(INPUT_POST,$args,TRUE);
-        $this->request['cookie']=filter_input_array(INPUT_COOKIE,$args,TRUE);
-
+        $this->request=new \Request();
         $this->view=$this->getView('main');
     }
 
@@ -50,15 +32,14 @@ class App
      */
     public static function getView($name='', $vars='')
     {
-        ob_start();
         $file='views/'.$name.'.php';
         if (file_exists($file)){
+	        ob_start();
             include($file);
             $view=ob_get_contents();
             ob_end_clean();
             return $view;
         }
-        ob_end_clean();
         return false;
     }
 
@@ -92,11 +73,11 @@ class App
     {
         $vars='';
         if ($this->authorise()) {
-            $u= new User();
-	        $user=$u->get('id',$this->session->user_id);
+            $u=new User();
+            $user=$u->get('id',$this->session->user_id);
             $this->username=$user->username;
-            if ($this->request['get']['task'] !== null) {
-                $task = $this->request['get']['task'];
+            if ($this->request->get['task'] !== null) {
+                $task = $this->request->get['task'];
                 $args = explode('.', $task);
                 $cname = '\\Controllers\\' . ucfirst($args[0]) . 'Controller';
                 $controller = new $cname;
@@ -104,15 +85,15 @@ class App
                 $vars = $controller->$method($this);
                 $vars['username']=$this->username;
             }
-            if ($this->request['get']['view'] !== null) {
-                $view = $this->request['get']['view'];
+            if ($this->request->get['view'] !== null) {
+                $view = $this->request->get['view'];
                 $this->render($this->getView($view, $vars));
                 $this->render($this->getView('logout',$vars),'auth');
             }
         }
         else
         {
-            if($this->request['get']['task']=='user.login')
+            if($this->request->get['task']=='user.login')
             {
                 $controller=new UserController();
                 $controller->login($this);

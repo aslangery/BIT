@@ -14,6 +14,9 @@ class Model
 
 	protected $statement=null;
 
+	/**
+	 * Model constructor.
+	 */
 	public function __construct()
 	{
 		$this->pdo=new \PDO(DSN,USER,PASS);

@@ -8,7 +8,7 @@
 
 namespace Models;
 
-class Expence
+class Expence extends Model
 {
     protected $table='expences';
 
@@ -25,7 +25,8 @@ class Expence
      */
     public function __construct($user_id=0, $cost=0)
     {
-        $this->user_id=$user_id;
+        parent::__construct();
+    	$this->user_id=$user_id;
         $this->cost=$cost;
         $this->payment_date=date('Y-n-d H:i:s');
     }
@@ -37,9 +38,9 @@ class Expence
     {
         $query='INSERT INTO '.$this->table.' VALUES(:id, :cost, :payment)';
 	    $this->statement=$this->pdo->prepare($query);
-	    $this->statement->bindParam('id',$this->user_id,\PDO::PARAM_INT);
-	    $this->statement->bindParam('cost',$this->cost);
-	    $this->statement->bindParam('cost',$this->payment_date);
+	    $this->statement->bindParam(':id',$this->user_id,\PDO::PARAM_INT);
+	    $this->statement->bindParam(':cost',$this->cost);
+	    $this->statement->bindParam(':payment',$this->payment_date);
 	    $result=$this->statement->execute();
 	    unset($this->statement);
 	    return $result;

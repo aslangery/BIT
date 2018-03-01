@@ -8,8 +8,6 @@
 
 namespace Models;
 
-use DB;
-
 class Billing extends Model
 {
     protected $table='billing';
@@ -22,23 +20,20 @@ class Billing extends Model
      * Billing constructor.
      * @param int $user_id
      */
-    public function __construct($user_id)
+    public function __construct($user_id=0)
     {
-        $query='SELECT user_id, amount FROM '.$this->table.' WHERE user_id= :id';
+        parent::__construct();
+    	$query='SELECT user_id, amount FROM '.$this->table.' WHERE user_id= :id';
 	    $this->statement=$this->pdo->prepare($query);
-	    $this->statement->bindParam('id', $user_id,\PDO::PARAM_INT);
+	    $this->statement->bindParam(':id', $user_id,\PDO::PARAM_INT);
 	    if($this->statement->execute())
 	    {
-		    $result=$this->statement->fetchObject('Models\Billing');
-		    unset($this->statement);
-		    $this->amount=$result->amount;
-		    $this->user_id=$result->user_id;
+		    if($result=$this->statement->fetchObject('Models\Billing')){
+			    $this->amount=$result->amount;
+			    $this->user_id=$result->user_id;
+		    }
 	    }
-	    else
-	    {
-		    unset($this->statement);
-		    return null;
-	    }
+	    unset($this->statement);
     }
 
     /**
@@ -62,10 +57,10 @@ class Billing extends Model
     {
         $query='SELECT * FROM expences WHERE user_id=:id';
 	    $this->statement=$this->pdo->prepare($query);
-	    $this->statement->bindParam('id',$this->user_id,\PDO::PARAM_INT);
+	    $this->statement->bindValue(':id', $this->user_id,\PDO::PARAM_INT);
 	    if($this->statement->execute())
 	    {
-		    $result=$this->statement->fetchAll(\PDO::FETCH_CLASS,'Models\Expension');
+		    $result=$this->statement->fetchAll(\PDO::FETCH_ASSOC);
 		    unset($this->statement);
 		    return $result;
 	    }
