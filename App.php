@@ -53,11 +53,20 @@ class App
         $this->view=preg_replace($pattern, $view, $this->view);
     }
 
-    public function response()
+	/**
+	 * @return bool|string
+	 */
+	public function response()
     {
-        return $this->view;
+	    $pattern='/\{\{.*\}\}/';
+	    $this->view=preg_replace($pattern, '', $this->view);
+    	return $this->view;
     }
-    public function authorise()
+
+	/**
+	 * @return bool
+	 */
+	public function authorise()
     {
         $session=new Session();
         $this->session=$session->get(session_id());
