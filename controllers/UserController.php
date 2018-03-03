@@ -7,7 +7,7 @@
  */
 
 namespace Controllers;
-
+if(!defined('APP')) die();
 use Models\User;
 use Models\Session;
 

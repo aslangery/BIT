@@ -7,6 +7,7 @@
  */
 
 namespace Controllers;
+if(!defined('APP')) die();
 
 use Models\Expence;
 use Models\Billing;
@@ -20,6 +21,7 @@ class ExpenceController
     {
         $cost=$app->request->post['cost'];
         $billing=new Billing($app->session->user_id);
+	    //Сумма оплаты не может быть меньше 0 и больше баланса
         if ($cost>0 && $cost<=$billing->amount)
         {
             $expence=new Expence($billing->user_id,$cost);

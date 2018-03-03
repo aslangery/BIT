@@ -7,6 +7,7 @@
  */
 
 namespace Models;
+if(!defined('APP')) die();
 
 class Session extends Model
 {

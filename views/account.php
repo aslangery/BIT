@@ -5,6 +5,7 @@
  * Date: 15.02.2018
  * Time: 12:39
  */
+if(!defined('APP')) die();
 ?>
 <div>
     <span>Текущее состояние: <b><?php echo $vars['amount'];?></b></span>

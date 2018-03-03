@@ -7,10 +7,13 @@
  */
 
 namespace Models;
+if(!defined('APP')) die();
 
 class User extends Model
 {
     protected $table='users';
+
+    protected $keys=['id', 'username', 'email'];
 
     public $id=0;
 
@@ -30,7 +33,7 @@ class User extends Model
 	}
 	public function get($key='', $value='')
 	{
-    	if ($key!=='' && $value!=='')
+    	if ($key!=='' && $value!=='' && in_array($key, $this->keys))
         {
 	        $query           = 'SELECT * FROM '.$this->table.' WHERE '.$key.' = :value';
 	        $this->statement = $this->pdo->prepare($query);

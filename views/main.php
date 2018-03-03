@@ -1,3 +1,4 @@
+<?php if(!defined('APP')) die();?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

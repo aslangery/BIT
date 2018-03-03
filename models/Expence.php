@@ -7,7 +7,7 @@
  */
 
 namespace Models;
-
+if(!defined('APP')) die();
 class Expence extends Model
 {
     protected $table='expences';
@@ -38,9 +38,9 @@ class Expence extends Model
     {
         $query='INSERT INTO '.$this->table.' VALUES(:id, :cost, :payment)';
 	    $this->statement=$this->pdo->prepare($query);
-	    $this->statement->bindParam(':id',$this->user_id,\PDO::PARAM_INT);
-	    $this->statement->bindParam(':cost',$this->cost);
-	    $this->statement->bindParam(':payment',$this->payment_date);
+	    $this->statement->bindParam(':id', $this->user_id,\PDO::PARAM_INT);
+	    $this->statement->bindParam(':cost', $this->cost);
+	    $this->statement->bindParam(':payment', $this->payment_date);
 	    $result=$this->statement->execute();
 	    unset($this->statement);
 	    return $result;
