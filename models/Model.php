@@ -7,7 +7,7 @@
  */
 
 namespace Models;
-
+if(!defined('APP')) die();
 class Model
 {
 	protected $pdo=null;

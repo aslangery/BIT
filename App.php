@@ -5,6 +5,7 @@
  * Date: 13.02.2018
  * Time: 21:42
  */
+if(!defined('APP')) die();
 use Models\Session;
 use Models\User;
 use Controllers\UserController;

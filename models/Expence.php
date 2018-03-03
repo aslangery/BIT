@@ -7,7 +7,7 @@
  */
 
 namespace Models;
-
+if(!defined('APP')) die();
 class Expence extends Model
 {
     protected $table='expences';

@@ -7,6 +7,7 @@
  */
 
 namespace Controllers;
+if(!defined('APP')) die();
 
 use Models\Expence;
 use Models\Billing;
